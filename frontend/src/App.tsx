@@ -3,6 +3,8 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
+import { SigninRes } from '../../shared/signin.types';
+import axios from 'axios';
 
 // Custom hooks
 import { useModels } from './hooks/useModels';
@@ -36,18 +38,42 @@ const App = () => {
   } = useModels();
 
   // Login handler
-  const handleLogin = () => {
-    // In a real app, you would validate against a backend
-    if (username === 'admin' && password === 'password') {
-      setIsLoggedIn(true);
-      toast({
-        title: "Logged in successfully",
-        description: "Welcome back, admin!",
+  const handleLogin = async () => {
+    //see if token is in local storage
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      localStorage.removeItem('accessToken');
+    }
+
+    try {
+      const { data } = await axios.post<SigninRes>('http://localhost:5000/signin', {
+        username,
+        password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-    } else {
+  
+  
+      if (data.success && data.data) {        setIsLoggedIn(true);
+        // Store the access token from the response
+        localStorage.setItem('accessToken', data.data.accessToken);
+        toast({
+          title: "Logged in successfully",
+          description: "Welcome back!",
+        });
+      } else {
+        toast({
+          title: "Login failed",
+          description: data.error || "Invalid credentials",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Login failed",
-        description: "Invalid username or password",
+        title: "Login error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
       });
     }
@@ -59,6 +85,7 @@ const App = () => {
     setUsername('');
     setPassword('');
     setMobileMenuOpen(false);
+    localStorage.removeItem('accessToken');
   };
 
   return (
