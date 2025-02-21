@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import SignRoutes from "./routes/sign.routes";
-import TokenRoutes from "./routes/token.routes";
 const morgan = require('morgan');
 
 config();
@@ -19,7 +18,6 @@ app.get("/", (req , res) => {
 });
 
 app.use("/", SignRoutes);
-app.use("/", TokenRoutes);
 
 
 const PORT = process.env.PORT || 5000;

@@ -1,17 +1,14 @@
-import {z } from '../backend/node_modules/zod';
+import { z } from '../backend/node_modules/zod';
 
 export const SigninReqSchema = z.object({
-    email: z.string().email(),
+    username: z.string(),
     password: z.string(),
 });
 export const SigninResSchema = z.object({
     success: z.boolean(),
     error: z.string().optional(),
     data: z.object({
-        username: z.string(),
-        email: z.string().email(),
         accessToken: z.string(),
-        refreshToken: z.string(),
     }).optional(),
 });
 

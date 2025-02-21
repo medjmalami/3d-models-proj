@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
-import { users } from "../../db/schema";
-import { db } from "../../db/index";
 import jwt from "jsonwebtoken";
-import { SigninReq } from "../../../../shared/signin.types"
-import { sql } from "drizzle-orm";
-import { refreshTokens } from "../../db/schema";
-import bcrypt from "bcrypt";
-import { SigninRes } from "../../../../shared/signin.types";
-import { SigninReqSchema } from "../../../../shared/signin.types";
+import { SigninReq, SigninRes, SigninReqSchema} from "../../../../shared/signin.types"
+import { config } from "dotenv";
+config();
+
 
 // Helper function for error handling
 const handleError = (res: Response, status: number, message: string) => {
@@ -16,12 +12,11 @@ const handleError = (res: Response, status: number, message: string) => {
 };
 
 
-
 const signin = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   const r : SigninReq = {
-    email,
+    username,
     password,
   }
   
@@ -33,50 +28,32 @@ const signin = async (req: Request, res: Response) => {
       return
     }
 
+    if (r.username === process.env.ADMIN_USERNAME && r.password === process.env.ADMIN_PASSWORD) {
+
+          // Generate JWT token
+      const accessToken = jwt.sign(
+        { username },
+        process.env.ACCESS_TOKEN_SECRET!,
+        { expiresIn: '1h' }
+      );
 
 
-    // Check if user exists
-    let [user] = await db.select().from(users).where(sql`email = ${email}`).limit(1);
-    if (!user) {
-      handleError(res, 404, "User not found");
-      return;
-    }
 
-    // Check if password matches
-    const passwordMatch = await bcrypt.compare(password, user.passwordHash);
-    if (!passwordMatch) {
-      handleError(res, 401, "Incorrect password");
-      return;
-    }
-
-    // Generate JWT token
-    const accessToken = jwt.sign(
-      { userId: user.id },
-      process.env.ACCESS_TOKEN_SECRET!,
-      { expiresIn: '1h' }
-    );
-
-    const refreshToken = jwt.sign(
-      { userId: user.id },
-      process.env.REFRESH_TOKEN_SECRET!,
-      { expiresIn: '7d' }
-    );
-
-    await db.insert(refreshTokens).values({
-      token : refreshToken,
-    });
-
-    const re : SigninRes = {
-      success: true,
-      data: {
-        username: user.username,
-        email: user.email,
-        accessToken,
-        refreshToken
+      const re : SigninRes = {
+        success: true,
+        data: {
+          accessToken,
+        }
       }
+      res.status(201).json(re);
+      return;
+    }else{
+      handleError(res, 401, "Invalid username or password");
+      return;
     }
-    res.status(201).json(re);
-    return;
+
+
+
 
   } catch (error: any) {
     // Handle unique constraint violations
