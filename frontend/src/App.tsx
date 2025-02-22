@@ -56,7 +56,8 @@ const App = () => {
       });
   
   
-      if (data.success && data.data) {        setIsLoggedIn(true);
+      if (data.success && data.data) {        
+        setIsLoggedIn(true);
         // Store the access token from the response
         localStorage.setItem('accessToken', data.data.accessToken);
         toast({
