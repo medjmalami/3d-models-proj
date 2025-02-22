@@ -4,7 +4,11 @@ import fs from 'fs';
 import { createCanvas } from 'canvas';
 import { db } from '../../db/index';
 import { items } from '../../db/schema';
-import { CLOSING } from 'ws';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { config } from 'dotenv';
+
+config();
+
 
 
   // Function to generate 2D thumbnail from 3D model
@@ -59,12 +63,11 @@ async function generate2DThumbnail(modelPath: string, thumbnailPath: string): Pr
   }
 
   export const createModel = async (req: Request, res: Response) => {
+
     
     try {
-        console.log(req);
-        res.status(200).json({ message: 'Hello World' });
         
-        /*
+        
         if (!req.file) {
           res.status(400).json({ error: 'No model file uploaded' });
           return;
@@ -81,7 +84,9 @@ async function generate2DThumbnail(modelPath: string, thumbnailPath: string): Pr
         // Get the uploaded file path
         const modelFilePath = req.file.path;
         const modelFileName = req.file.filename;
+
         
+        /*
         // Generate thumbnail path
         const thumbnailDir = path.join(__dirname, '../uploads/thumbnails');
         if (!fs.existsSync(thumbnailDir)) {
@@ -115,6 +120,14 @@ async function generate2DThumbnail(modelPath: string, thumbnailPath: string): Pr
         });
         */
       } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
+            res.status(401).json({
+              error: 'Token expired',
+              message: 'Please login again'
+            });
+            return;
+          }
+
         console.error('Error processing 3D model upload:', error);
         res.status(500).json({ error: 'Failed to process the upload' });
       }
