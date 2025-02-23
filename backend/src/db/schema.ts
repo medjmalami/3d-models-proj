@@ -7,7 +7,6 @@ export const items = pgTable('items', {
   description: text('description'),
   category: varchar('category', { length: 50 }).notNull(),
   modelUrl: varchar('model_url', { length: 255 }).notNull(),
-  thumbnailUrl: varchar('thumbnail_url', { length: 255 }).notNull(),
   dateAdded: timestamp('date_added').defaultNow().notNull(),
 });
 

@@ -16,7 +16,7 @@ const modelStorage = multer.diskStorage({
 // Configure multer for file upload
 export const upload = multer({
     storage: modelStorage,
-    /*fileFilter: (req, file, cb ) => {
+    fileFilter: (req, file, cb ) => {
       const validExtensions = ['.gltf', '.glb', '.obj', '.stl', '.fbx'];
       const ext = path.extname(file.originalname).toLowerCase();
       if (validExtensions.includes(ext)) {
@@ -24,7 +24,7 @@ export const upload = multer({
       } else {
         cb(new Error('Invalid file type. Only 3D model files are allowed.'));
       }
-    },*/
+    },
     limits: {
       fileSize: 50 * 1024 * 1024 // 50MB max file size
     }

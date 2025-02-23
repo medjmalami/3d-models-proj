@@ -3,7 +3,6 @@ import path from 'path';
 import { db } from '../../db/index';
 import { items } from '../../db/schema';
 import { config } from 'dotenv';
-import { generateThumbnail } from '../../config/generateThumbnail';
 
 config();
 
@@ -23,15 +22,14 @@ export const createModel = async (req: Request, res: Response) => {
           res.status(400).json({ error: 'Model name and category are required' });
           return;
         }*/
-       console.log(req);
     
         const modelFileName = req.file.filename;
-        const inputFile = req.file.path;
-        const outputFile = path.join("public/uploads/thumbnails", `${modelFileName}.png`);
 
-        //await generateThumbnail(inputFile, outputFile);
+        const inputPath = path.join(__dirname, '../../uploads', modelFileName);
 
-        res.json({ message: "Thumbnail generated", thumbnail: `/thumbnails/${modelFileName}.png` });
+
+
+        res.json({ message: inputPath });
         return;
 
       } catch (error) {
