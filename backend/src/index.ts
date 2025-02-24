@@ -3,13 +3,22 @@ import cors from "cors";
 import { config } from "dotenv";
 import SignRoutes from "./routes/sign.routes";
 import ModelRoutes from "./routes/models.routes";
+import path from 'path';
 const morgan = require('morgan');
 
 config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+// CORS middleware configuration
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Static file serving setup
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads', 'models')));
 
 
 app.use(morgan('combined'));

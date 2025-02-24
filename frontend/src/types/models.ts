@@ -23,7 +23,6 @@ export interface Model3D {
   description: string;
   category: ModelCategory;
   modelUrl: string;
-  thumbnailUrl: string;
   dateAdded: string;
 }
 

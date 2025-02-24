@@ -7,7 +7,6 @@ export const INITIAL_MODELS: Model3D[] = [
     description: 'Classic Minecraft creeper mob',
     category: 'mobs',
     modelUrl: '/models/creeper.glb',
-    thumbnailUrl: '/thumbnails/creeper.png',
     dateAdded: '2025-02-19'
   },
   {
@@ -16,7 +15,6 @@ export const INITIAL_MODELS: Model3D[] = [
     description: 'Powerful diamond sword with enchantments',
     category: 'sword',
     modelUrl: '/models/sword.glb',
-    thumbnailUrl: '/thumbnails/sword.png',
     dateAdded: '2025-02-18'
   },
   {
@@ -25,7 +23,6 @@ export const INITIAL_MODELS: Model3D[] = [
     description: 'Magical wizard hat with stars',
     category: 'hats',
     modelUrl: '/models/hat.glb',
-    thumbnailUrl: '/thumbnails/hat.png',
     dateAdded: '2025-02-17'
   }
 ];
