@@ -31,3 +31,10 @@ export const ALL_CATEGORIES: ModelCategory[] = [
   'fourniture', 'miscellaneous', 'vehicules', 'prefix', 'brooms', 
   'decorations', 'herbology', 'food', 'logos', 'bundle', 'bundle-gamer'
 ];
+
+export interface uploadReq{
+  modelFile: File,
+  modelName: string,
+  category: ModelCategory,
+  description: string
+}

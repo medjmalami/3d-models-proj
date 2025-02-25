@@ -21,7 +21,7 @@ app.use(cors({
 app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads', 'models')));
 
 
-app.use(morgan('combined'));
+app.use(morgan('tiny'));
 
 app.get("/", (req , res) => {
   res.send("Messanger Backend is Running!");

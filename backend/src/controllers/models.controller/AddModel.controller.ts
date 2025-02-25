@@ -24,14 +24,14 @@ export const createModel = async (req: Request, res: Response) => {
         const modelFileName = req.file.filename;
 
         // add model to database
-        await db.insert(items).values({
+        const [model] = await db.insert(items).values({
           name: modelName,
           category: category,
           description: description,
           modelUrl: modelFileName,
-        });
+        }).returning();
 
-        res.json({ message: modelFileName });
+        res.json({ model });
         return;
 
       } catch (error) {
