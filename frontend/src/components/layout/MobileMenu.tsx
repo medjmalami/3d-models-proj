@@ -32,7 +32,7 @@ export const MobileMenu = ({
       {isLoggedIn ? (
         <div className="flex flex-col gap-3">
           <p className="text-sm">Welcome, Admin</p>
-          <Button variant="outline" onClick={handleLogout} size="sm" className="w-full">
+          <Button variant="outline" onClick={handleLogout} size="sm" className="w-full text-black">
             <LogOut className="h-4 w-4 mr-2" />
             Logout
           </Button>
