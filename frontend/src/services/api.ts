@@ -1,4 +1,3 @@
-import { Model3D, uploadReq } from '../types/models';
 
 // Central place for all API calls
 
