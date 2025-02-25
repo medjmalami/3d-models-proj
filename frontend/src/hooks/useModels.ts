@@ -5,7 +5,7 @@ import { modelApi } from '@/services/api';
 import { useEffect } from 'react';
 
 // Base URL for model files
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const UPLOADS_PATH = '/uploads/';
 
 export const useModels = () => {

@@ -27,14 +27,12 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
   const modelViewerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Log the model URL for debugging
-    console.log('Attempting to load model:', model.modelUrl);
+
 
     // Add event listeners to model-viewer if it exists
     const modelViewer = modelViewerRef.current;
     if (modelViewer) {
       const handleLoad = () => {
-        console.log('Model loaded successfully:', model.name);
         setModelLoaded(true);
         setModelError(false);
       };
@@ -69,14 +67,14 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
               <div className="text-sm text-gray-500">Loading model...</div>
             </div>
           )}
-          
+
           {modelError && (
             <div className="absolute inset-0 flex items-center justify-center flex-col p-4">
               <div className="text-sm text-red-500 mb-2">Error loading model</div>
               <div className="text-xs text-gray-500 text-center">{model.modelUrl}</div>
             </div>
           )}
-          
+
           {/* Make the model-viewer visibility conditional on loading state */}
           <model-viewer
             ref={modelViewerRef}

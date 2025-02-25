@@ -1,5 +1,5 @@
 // Central place for all API calls
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export const modelApi = {
   // Get all models
@@ -34,11 +34,8 @@ export const modelApi = {
   // Upload/create a new model - properly handle FormData
   uploadModel: async (formData: FormData) => {
     try {
-      // Debug log to see FormData contents
-      console.log("Uploading model with FormData:");
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
-      }
+
+
 
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
@@ -62,7 +59,6 @@ export const modelApi = {
       }
       
       const data = await response.json();
-      console.log('Upload successful, server response:', data);
       
       // Ensure modelUrl has the correct path if needed
       if (data.model && data.model.modelUrl && !data.model.modelUrl.startsWith('http')) {

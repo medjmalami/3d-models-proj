@@ -1,5 +1,5 @@
 {
-  "id": "d978d71d-4f17-4a1e-9b3f-2eb43f89b018",
+  "id": "b217d294-99ef-4151-9150-9f316133baeb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -29,7 +29,8 @@
         },
         "category": {
           "name": "category",
-          "type": "varchar(50)",
+          "type": "category",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -64,7 +65,31 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.category": {
+      "name": "category",
+      "schema": "public",
+      "values": [
+        "mobs",
+        "guns",
+        "wands/staffs",
+        "sword",
+        "hats",
+        "backpack",
+        "fourniture",
+        "miscellaneous",
+        "vehicules",
+        "prefix",
+        "brooms",
+        "decorations",
+        "herbology",
+        "food",
+        "logos",
+        "bundle",
+        "bundle-gamer"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

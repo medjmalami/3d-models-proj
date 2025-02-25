@@ -15,7 +15,6 @@ export const deleteModel = async (req: Request, res: Response) => {
           return;
         }
 
-        
         const deletedModel = await db.delete(items).where(eq(items.id, id)).returning();
 
         // Delete the file from the uploads folder

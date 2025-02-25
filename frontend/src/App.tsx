@@ -46,7 +46,7 @@ const App = () => {
     }
 
     try {
-      const { data } = await axios.post<SigninRes>('http://localhost:5000/signin', {
+      const { data } = await axios.post<SigninRes>(`${import.meta.env.VITE_API_URL}/signin`, {
         username,
         password
       }, {

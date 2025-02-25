@@ -55,11 +55,7 @@ export const AddModelDialog = ({
       formData.append("category", newModel.category || "");
       formData.append("description", newModel.description || "");
       
-      // Log FormData for debugging
-      console.log("Form data prepared:");
-      for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]);
-      }
+
       
       // Send to parent component
       handleAddModel(formData);

@@ -12,14 +12,13 @@ const app = express();
 app.use(express.json());
 // CORS middleware configuration
 app.use(cors({
-  origin: '*',
+  origin: `${process.env.FRONTEND_URL}`,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Static file serving setup
 app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads', 'models')));
-
 
 app.use(morgan('tiny'));
 
