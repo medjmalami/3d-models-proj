@@ -1,6 +1,4 @@
-
 // Central place for all API calls
-
 const API_BASE_URL = 'http://localhost:5000';
 
 export const modelApi = {
@@ -33,20 +31,45 @@ export const modelApi = {
     }
   },
   
-  // Upload/create a new model
-  uploadModel: async (modelData : FormData) => {
+  // Upload/create a new model - properly handle FormData
+  uploadModel: async (formData: FormData) => {
     try {
-        console.log(modelData);
+      // Debug log to see FormData contents
+      console.log("Uploading model with FormData:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value instanceof File ? `File: ${value.name}` : value);
+      }
+
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
+        // No Content-Type header - browser sets it automatically with boundary for FormData
         headers: {
-          'Content-Type': 'application/json',
           authorization: `Bearer ${localStorage.getItem('accessToken')}`
         },
-        body: JSON.stringify(modelData),
+        body: formData
       });
-      if (!response.ok) throw new Error('Failed to upload model');
-      return await response.json();
+      
+      // Handle non-OK responses
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server error response:', errorText);
+        try {
+          const errorJson = JSON.parse(errorText);
+          throw new Error(errorJson.message || 'Upload failed');
+        } catch (e) {
+          throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
+        }
+      }
+      
+      const data = await response.json();
+      console.log('Upload successful, server response:', data);
+      
+      // Ensure modelUrl has the correct path if needed
+      if (data.model && data.model.modelUrl && !data.model.modelUrl.startsWith('http')) {
+        data.model.modelUrl = `${API_BASE_URL}/uploads/${data.model.modelUrl}`;
+      }
+      
+      return data;
     } catch (error) {
       console.error('Error uploading model:', error);
       throw error;

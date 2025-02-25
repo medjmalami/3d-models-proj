@@ -3,7 +3,10 @@ import { Model3D, ModelCategory } from '../types/models';
 import { useToast } from '@/hooks/use-toast';
 import { modelApi } from '@/services/api';
 import { useEffect } from 'react';
-import { uploadReq } from '../types/models';
+
+// Base URL for model files
+const API_BASE_URL = 'http://localhost:5000';
+const UPLOADS_PATH = '/uploads/';
 
 export const useModels = () => {
   const [models, setModels] = useState<Model3D[]>([]);
@@ -17,12 +20,22 @@ export const useModels = () => {
   });
   
   const { toast } = useToast();
-
+  
   useEffect(() => {
     const fetchModels = async () => {
       try {
         const data = await modelApi.getAllModels();
-        setModels(data.models);
+        
+        // Process the models to ensure they have full URLs
+        const processedModels = data.models.map((model: Model3D) => ({
+          ...model,
+          // Check if modelUrl already has the full path or just the filename
+          modelUrl: model.modelUrl.startsWith('http') 
+            ? model.modelUrl 
+            : `${API_BASE_URL}${UPLOADS_PATH}${model.modelUrl}`
+        }));
+        
+        setModels(processedModels);
       } catch (err) {
         toast({
           title: "Error loading models",
@@ -30,14 +43,15 @@ export const useModels = () => {
         });
       } 
     };
+    
     fetchModels();
   }, []);
-
+  
   // Filter models by selected category
   const filteredModels = selectedCategory === 'all' 
     ? models 
     : models.filter(model => model.category === selectedCategory);
-
+  
   // Delete model handler
   const handleDeleteModel = (id: string) => {
     const deleteModel = async () => {
@@ -57,19 +71,23 @@ export const useModels = () => {
     };
     
     deleteModel();
-
-    toast({
-      title: "Model deleted",
-      description: "The model has been permanently removed",
-    });
   };
-
+  
   // Add new model handler
   const handleAddModel = (modelData: FormData) => {
     const addModel = async () => {
       try {
         const data = await modelApi.uploadModel(modelData);
-        setModels([...models, data.model]);
+        
+        // Ensure the model URL is complete
+        const newModelData = {
+          ...data.model,
+          modelUrl: data.model.modelUrl.startsWith('http') 
+            ? data.model.modelUrl 
+            : `${API_BASE_URL}${UPLOADS_PATH}${data.model.modelUrl}`
+        };
+        
+        setModels([...models, newModelData]);
         setShowAddDialog(false);
         setNewModel({
           name: '',
@@ -77,9 +95,10 @@ export const useModels = () => {
           category: 'mobs',
           modelUrl: '',
         });
+        
         toast({
           title: "Model added",
-          description: `${data.model.name} has been added to your collection`,
+          description: `${newModelData.name} has been added to your collection`,
         });
       } catch (err) {
         toast({
@@ -88,9 +107,10 @@ export const useModels = () => {
         });
       }
     }
+    
     addModel();
   };
-
+  
   return {
     models,
     setModels,
