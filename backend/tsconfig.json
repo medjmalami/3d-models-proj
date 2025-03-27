@@ -1,7 +1,7 @@
 {
-    "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -11,6 +11,11 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    
-  }
-  }
+    "outDir": "./dist",  // Add this line to specify the output directory
+    "declaration": true,  // Optional: Generate .d.ts declaration files
+    "sourceMap": true      // Optional: Generate source maps
+  },
+  "include": [
+    "src/**/*"  // Include all files in the "src" folder
+  ]
+}
