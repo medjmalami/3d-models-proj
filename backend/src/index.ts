@@ -28,6 +28,9 @@ app.get("/", (req , res) => {
 
 app.use("/", SignRoutes);
 app.use("/", ModelRoutes);
+app.get("*", (req , res) => {
+  res.status(404).json({ error: "Route not found" });
+})
 
 
 module.exports = app;
