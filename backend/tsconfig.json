@@ -16,6 +16,7 @@
     "sourceMap": true      // Optional: Generate source maps
   },
   "include": [
-    "src/**/*"  // Include all files in the "src" folder
+    "./src/**/*",
+    "./api/"  // Include all files in the "src" folder
   ]
 }

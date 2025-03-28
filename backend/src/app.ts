@@ -22,9 +22,6 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads
 
 app.use(morgan('tiny'));
 
-app.get("/", (req , res) => {
-  res.send("Messanger Backend is Running!");
-});
 
 app.use("/", SignRoutes);
 app.use("/", ModelRoutes);
@@ -33,7 +30,7 @@ app.get("*", (req , res) => {
 })
 
 
-module.exports = app;
+export default app;
 
 
 
