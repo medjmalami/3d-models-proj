@@ -1,8 +1,23 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { SigninReq, SigninRes, SigninReqSchema} from "../../../../shared/signin.types"
 import { config } from "dotenv";
 config();
+import { z } from '../../../node_modules/zod';
+
+const SigninReqSchema = z.object({
+    username: z.string(),
+    password: z.string(),
+});
+const SigninResSchema = z.object({
+    success: z.boolean(),
+    error: z.string().optional(),
+    data: z.object({
+        accessToken: z.string(),
+    }).optional(),
+});
+
+type SigninReq = z.infer<typeof SigninReqSchema>;
+type SigninRes = z.infer<typeof SigninResSchema>;
 
 
 // Helper function for error handling
