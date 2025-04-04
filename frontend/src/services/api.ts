@@ -34,9 +34,6 @@ export const modelApi = {
   // Upload/create a new model - properly handle FormData
   uploadModel: async (formData: FormData) => {
     try {
-
-
-
       const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
         // No Content-Type header - browser sets it automatically with boundary for FormData
@@ -59,12 +56,7 @@ export const modelApi = {
       }
       
       const data = await response.json();
-      
-      // Ensure modelUrl has the correct path if needed
-      if (data.model && data.model.modelUrl && !data.model.modelUrl.startsWith('http')) {
-        data.model.modelUrl = `${API_BASE_URL}/uploads/${data.model.modelUrl}`;
-      }
-      
+            
       return data;
     } catch (error) {
       console.error('Error uploading model:', error);

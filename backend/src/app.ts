@@ -29,6 +29,9 @@ app.get("*", (req , res) => {
   res.status(404).json({ error: "Route not found" });
 })
 
+app.listen( 5000, () => {
+  console.log(`Server is running on port 5000`);
+});
 
 export default app;
 

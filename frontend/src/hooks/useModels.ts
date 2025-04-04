@@ -5,8 +5,7 @@ import { modelApi } from '@/services/api';
 import { useEffect } from 'react';
 
 // Base URL for model files
-const API_BASE_URL = import.meta.env.VITE_API_URL;
-const UPLOADS_PATH = '/uploads/';
+const BUCKET_URL = 'https://hkjzouwgvrkobjvhcwtg.supabase.co/storage/v1/object/public/3dmodelbucket/';
 
 export const useModels = () => {
   const [models, setModels] = useState<Model3D[]>([]);
@@ -30,9 +29,9 @@ export const useModels = () => {
         const processedModels = data.models.map((model: Model3D) => ({
           ...model,
           // Check if modelUrl already has the full path or just the filename
-          modelUrl: model.modelUrl.startsWith('http') 
+          modelUrl: model.modelUrl.startsWith('https') 
             ? model.modelUrl 
-            : `${API_BASE_URL}${UPLOADS_PATH}${model.modelUrl}`
+            : `${BUCKET_URL}${model.modelUrl}`
         }));
         
         setModels(processedModels);
@@ -82,9 +81,9 @@ export const useModels = () => {
         // Ensure the model URL is complete
         const newModelData = {
           ...data.model,
-          modelUrl: data.model.modelUrl.startsWith('http') 
+          modelUrl: data.model.modelUrl.startsWith('https') 
             ? data.model.modelUrl 
-            : `${API_BASE_URL}${UPLOADS_PATH}${data.model.modelUrl}`
+            : `${BUCKET_URL}${data.model.modelUrl}`
         };
         
         setModels([...models, newModelData]);

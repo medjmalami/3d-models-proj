@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FaSpinner } from "react-icons/fa"; // Importing the spinner icon
 
 interface AddModelDialogProps {
   showAddDialog: boolean;
@@ -29,34 +30,34 @@ export const AddModelDialog = ({
 }: AddModelDialogProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const handleSubmit = () => {
     if (!file) {
       alert("Please select a file.");
       return;
     }
-    
+
     if (!newModel.name || !newModel.category) {
       alert("Please provide a name and category for the model.");
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
+    console.log(isSubmitting)
+
     try {
       // Create FormData object
       const formData = new FormData();
-      
+
       // Append file with the key the backend expects
       formData.append("modelFile", file);
-      
+
       // Append other fields
       formData.append("modelName", newModel.name || "");
       formData.append("category", newModel.category || "");
       formData.append("description", newModel.description || "");
-      
 
-      
       // Send to parent component
       handleAddModel(formData);
     } catch (error) {
@@ -66,7 +67,7 @@ export const AddModelDialog = ({
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
       <DialogContent className="sm:max-w-md">
@@ -140,8 +141,19 @@ export const AddModelDialog = ({
           <Button variant="outline" onClick={() => setShowAddDialog(false)} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Add Model"}
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className={isSubmitting ? "opacity-50" : ""}
+          >
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <FaSpinner className="animate-spin mr-2" size={16} />
+                Adding...
+              </div>
+            ) : (
+              "Add Model"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
