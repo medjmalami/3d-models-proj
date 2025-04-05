@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { Loader2, Trash2 } from 'lucide-react';
 import { Model3D } from '../../types/models';
-import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
@@ -24,11 +24,10 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [modelError, setModelError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const modelViewerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-
-
     // Add event listeners to model-viewer if it exists
     const modelViewer = modelViewerRef.current;
     if (modelViewer) {
@@ -53,6 +52,23 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
     }
   }, [model.modelUrl, model.name]);
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await onDelete(model.id);
+    } catch (error) {
+      console.error('Error deleting model:', error);
+      // If there's an error, we need to reset the deleting state
+      setIsDeleting(false);
+      // Keep the dialog open in case of error
+      return;
+    }
+    // Close the dialog after successful deletion
+    setShowDeleteConfirm(false);
+    // Reset the deleting state
+    setIsDeleting(false);
+  };
+
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
@@ -64,7 +80,10 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
         <div className="w-full h-48 bg-gray-100 rounded-md mb-3 relative">
           {!modelLoaded && !modelError && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-sm text-gray-500">Loading model...</div>
+              <div className="text-sm text-gray-500 flex items-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                Loading model...
+              </div>
             </div>
           )}
 
@@ -102,6 +121,7 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
             variant="destructive" 
             size="sm"
             onClick={() => setShowDeleteConfirm(true)}
+            disabled={isDeleting}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -109,7 +129,15 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
       </CardFooter>
       
       {/* Delete Confirmation */}
-      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+      <AlertDialog 
+        open={showDeleteConfirm} 
+        onOpenChange={(open) => {
+          // Only allow closing if not currently deleting
+          if (!isDeleting) {
+            setShowDeleteConfirm(open);
+          }
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -118,14 +146,20 @@ export const ModelCard = ({ model, isAdmin, onDelete }: ModelCardProps) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              onClick={() => {
-                onDelete(model.id);
-                setShowDeleteConfirm(false);
-              }}
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {isDeleting ? (
+                <div className="flex items-center">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </div>
+              ) : (
+                "Delete"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

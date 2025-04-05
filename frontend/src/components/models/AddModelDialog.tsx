@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FaSpinner } from "react-icons/fa"; // Importing the spinner icon
+import { Loader2 } from 'lucide-react';
 
 interface AddModelDialogProps {
   showAddDialog: boolean;
@@ -30,46 +30,69 @@ export const AddModelDialog = ({
 }: AddModelDialogProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = () => {
-    if (!file) {
-      alert("Please select a file.");
-      return;
-    }
-
-    if (!newModel.name || !newModel.category) {
-      alert("Please provide a name and category for the model.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    console.log(isSubmitting)
-
-    try {
-      // Create FormData object
-      const formData = new FormData();
-
-      // Append file with the key the backend expects
-      formData.append("modelFile", file);
-
-      // Append other fields
-      formData.append("modelName", newModel.name || "");
-      formData.append("category", newModel.category || "");
-      formData.append("description", newModel.description || "");
-
-      // Send to parent component
-      handleAddModel(formData);
-    } catch (error) {
-      console.error("Error preparing form data:", error);
-      alert("Error preparing form data. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation(); // Stop event propagation
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    } else {
+      setFile(null);
     }
   };
-
+  
+  const handleSubmit = (e?: React.MouseEvent) => {
+    // If this was triggered by an event, prevent default behavior
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Check if this is a legitimate submission
+    if (!e || (e.currentTarget as HTMLElement).tagName === 'BUTTON') {
+      if (!file) {
+        alert("Please select a file.");
+        return;
+      }
+      
+      if (!newModel.name || !newModel.category) {
+        alert("Please provide a name and category for the model.");
+        return;
+      }
+      
+      setIsSubmitting(true);
+      
+      try {
+        // Create FormData object
+        const formData = new FormData();
+        
+        // Append file with the key the backend expects
+        formData.append("modelFile", file);
+        
+        // Append other fields
+        formData.append("modelName", newModel.name || "");
+        formData.append("category", newModel.category || "");
+        formData.append("description", newModel.description || "");
+        
+        // Send to parent component
+        handleAddModel(formData);
+      } catch (error) {
+        console.error("Error preparing form data:", error);
+        alert("Error preparing form data. Please try again.");
+        setIsSubmitting(false); // Only reset on error
+      }
+    }
+  };
+  
   return (
-    <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+    <Dialog 
+      open={showAddDialog} 
+      onOpenChange={(open) => {
+        if (!open) {
+          setIsSubmitting(false); // Reset when dialog closes
+        }
+        setShowAddDialog(open);
+      }}
+    >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add New Model</DialogTitle>
@@ -128,7 +151,7 @@ export const AddModelDialog = ({
               type="file"
               id="model-file"
               accept=".glb,.gltf"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={handleFileChange}
               className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               required
             />
@@ -138,19 +161,24 @@ export const AddModelDialog = ({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setShowAddDialog(false)} disabled={isSubmitting}>
+          <Button 
+            variant="outline" 
+            onClick={() => setShowAddDialog(false)} 
+            disabled={isSubmitting}
+            type="button"
+          >
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmit}
+          <Button 
+            onClick={(e) => handleSubmit(e)} 
             disabled={isSubmitting}
-            className={isSubmitting ? "opacity-50" : ""}
+            type="button"
           >
             {isSubmitting ? (
-              <div className="flex items-center">
-                <FaSpinner className="animate-spin mr-2" size={16} />
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Adding...
-              </div>
+              </>
             ) : (
               "Add Model"
             )}
