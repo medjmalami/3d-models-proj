@@ -1,22 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "CommonJS",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strictPropertyInitialization": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
     "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",  // Add this line to specify the output directory
-    "declaration": true,  // Optional: Generate .d.ts declaration files
-    "sourceMap": true      // Optional: Generate source maps
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "./src/**/*",
-    "./api/"  // Include all files in the "src" folder
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
