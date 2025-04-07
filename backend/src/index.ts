@@ -9,6 +9,8 @@ config();
 
 const app = express();
 app.use(express.json());
+
+console.log("CORS Origin:", process.env.FRONTEND_URL);
 // CORS middleware configuration
 app.use(cors({
   origin: process.env.FRONTEND_URL ,
