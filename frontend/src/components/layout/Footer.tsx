@@ -15,7 +15,7 @@ export const Footer = () => {
               className="flex items-center text-gray-300 hover:text-white"
             >
               <Mail className="h-4 w-4 mr-2" />
-              contact@minecraft-models.com
+              jmalmohamedamine1@gmail.com
             </a>
           </div>
         </div>
