@@ -1,5 +1,5 @@
 {
-  "id": "32e3f35c-61b1-4681-9c42-648415000325",
+  "id": "77519ff3-c4f8-42db-a29e-1fd238b0a903",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -71,22 +71,10 @@
       "schema": "public",
       "values": [
         "mobs",
-        "guns",
-        "wands/staffs",
-        "sword",
-        "hats",
-        "backpack",
-        "fourniture",
-        "miscellaneous",
-        "vehicules",
-        "prefix",
-        "brooms",
-        "decorations",
-        "herbology",
+        "armor",
+        "weapon",
         "food",
-        "logos",
-        "bundle",
-        "bundle-gamer"
+        "misc"
       ]
     }
   },

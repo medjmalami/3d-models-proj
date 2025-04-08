@@ -2,9 +2,7 @@
 import { pgTable, uuid, varchar, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
 
 export const categoryEnum = pgEnum("category", [
-  "mobs", "guns", "wands/staffs", "sword", "hats", "backpack",
-  "fourniture", "miscellaneous", "vehicules", "prefix", "brooms",
-  "decorations", "herbology", "food", "logos", "bundle", "bundle-gamer"
+  "mobs", "armor", "weapon", "food", "misc",
 ]);
 
 export const items = pgTable("items", {

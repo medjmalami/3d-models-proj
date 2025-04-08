@@ -1,21 +1,10 @@
 export type ModelCategory = 
   | 'mobs'
-  | 'guns'
-  | 'wands/staffs'
-  | 'sword'
-  | 'hats'
-  | 'backpack'
-  | 'fourniture'
-  | 'miscellaneous'
-  | 'vehicules'
-  | 'prefix'
-  | 'brooms'
-  | 'decorations'
-  | 'herbology'
   | 'food'
-  | 'logos'
-  | 'bundle'
-  | 'bundle-gamer';
+  | 'weapon'
+  | 'armor'
+  | 'misc'
+
 
 export interface Model3D {
   id: string;
@@ -27,9 +16,7 @@ export interface Model3D {
 }
 
 export const ALL_CATEGORIES: ModelCategory[] = [
-  'mobs', 'guns', 'wands/staffs', 'sword', 'hats', 'backpack', 
-  'fourniture', 'miscellaneous', 'vehicules', 'prefix', 'brooms', 
-  'decorations', 'herbology', 'food', 'logos', 'bundle', 'bundle-gamer'
+  'mobs', 'food', 'weapon', 'armor', 'misc'
 ];
 
 export interface uploadReq{

@@ -6,10 +6,10 @@ export const ModelImagePlaceholder = ({ category }: { category: ModelCategory })
   const getColorForCategory = (cat: ModelCategory) => {
     const colors = {
       'mobs': '#5d8a68',      // Green for creatures
-      'guns': '#8a5d5d',      // Red for weapons
-      'sword': '#8a7c5d',     // Brown for weapons
-      'hats': '#5d7c8a',      // Blue for wearables
-      'backpack': '#8a5d7c',  // Purple for wearables
+      'armor': '#8a5d5d',      // Red for weapons
+      'weapon': '#8a7c5d',     // Brown for weapons
+      'food': '#5d7c8a',      // Blue for wearables
+      'misc': '#8a5d7c',  // Purple for wearables
       'default': '#6b6b6b'    // Gray default
     };
     

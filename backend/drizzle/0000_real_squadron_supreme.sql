@@ -1,4 +1,4 @@
-CREATE TYPE "public"."category" AS ENUM('mobs', 'guns', 'wands/staffs', 'sword', 'hats', 'backpack', 'fourniture', 'miscellaneous', 'vehicules', 'prefix', 'brooms', 'decorations', 'herbology', 'food', 'logos', 'bundle', 'bundle-gamer');--> statement-breakpoint
+CREATE TYPE "public"."category" AS ENUM('mobs', 'armor', 'weapon', 'food', 'misc');--> statement-breakpoint
 CREATE TABLE "items" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(100) NOT NULL,
